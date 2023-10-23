@@ -1,5 +1,26 @@
 #Haven't tested this yet
 
+required_packages=c("phyloseq","ggplot2","biomformat","dplyr","RColorBrewer","vegan","DESeq2","scales")
+
+for (currPack in required_packages){
+	installed=require(eval(currPack), character.only=T)
+	if (!installed){
+		if (currPack %in% rownames(available.packages())){
+			install.packages(eval(currPack))
+		} else {
+			if (!require("BiocManager", quietly = TRUE)){
+				install.packages("BiocManager")
+			}
+			BiocManager::install(eval(currPack))
+		}
+	}
+}
+
+for (currPack in required_packages){
+	library(eval(currPack), character.only=T)
+}
+
+
 library("phyloseq")
 library(ggplot2)
 library(biomformat)

@@ -83,3 +83,4 @@ done
 
 #Need to add check for chimeric reads containing the sispa barcodes.
 
+# Load the data into R and run the analysis there
