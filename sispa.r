@@ -21,15 +21,6 @@ for (currPack in required_packages){
 }
 
 
-library("phyloseq")
-library(ggplot2)
-library(biomformat)
-library(dplyr)
-library(RColorBrewer)
-library(vegan)
-library("DESeq2")
-library(scales)
-
 sample_data <- read.csv("sample_data.csv")
 row.names(sample_data) <- sample_data$X
 sample_data <- sample_data %>% select (-X) 
