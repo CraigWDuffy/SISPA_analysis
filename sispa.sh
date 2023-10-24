@@ -89,10 +89,9 @@ for i in $startDir/*gz; do
 	j=$(basename $i)
 	k=${j/.fastq.gz/}
 	time gunzip -c $i | conda run -n sispa chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
-
 done
 
-if ($kraken){
+if [ $kraken==TRUE ]; then
 	for j in $workingFolder/trimmed*gz; do
 		k=$(basename $j)
 		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
@@ -100,7 +99,7 @@ if ($kraken){
 		# Run the R script on each of the files
 		conda run -n sispa Rscript sispa.r $workingFolder $sampleData
 	done
-}
+fi
 
 #if($consensus){
 	#
