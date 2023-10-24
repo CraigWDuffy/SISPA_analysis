@@ -91,15 +91,17 @@ for i in $startDir/*gz; do
 	time gunzip -c $i | conda run -n sispa chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
 done
 
-if [ $kraken==TRUE ]; then
-	for j in $workingFolder/trimmed*gz; do
-		k=$(basename $j)
-		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
-		conda run -n sispa kraken-biom $workingFolder/*txt -o $workingFolder/OUTPUT_FP
-		# Run the R script on each of the files
-		conda run -n sispa Rscript sispa.r $workingFolder $sampleData
-	done
-fi
+echo $kraken
+
+#if [ $kraken==TRUE ]; then
+#	for j in $workingFolder/trimmed*gz; do
+#		k=$(basename $j)
+#		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
+#		conda run -n sispa kraken-biom $workingFolder/*txt -o $workingFolder/OUTPUT_FP
+#		# Run the R script on each of the files
+#		conda run -n sispa Rscript sispa.r $workingFolder $sampleData
+#	done
+#fi
 
 #if($consensus){
 	#
