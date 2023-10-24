@@ -2,18 +2,25 @@
 # Script to run sispa analysis
 
 usage(){
-	echo "Usage: $0 -d [dir] -5 <value> -3 <value>"
+	echo "Usage: $0 -d [dir] <optional arguments>"
 	echo "-d: Experiment directory containing the fastq.gz nanopore reads - Must be included"
 	echo "-5: How many bases to trim from the 5 prime end of each read - Default 18"
 	echo "-3: How many bases to trim from the 3 prime end of each read - Default 18"
+	echo "-k: Run the kraken analysis"
+	echo "-s: Sample data in csv format"
+	echo "-c: Generate a consensus sequence"
 	exit 1
 }
 
 arg5=18
 arg3=18
 
-while getopts ":d:5:3:h" opt; do
+while getopts ":d:5:3:h:k:c" opt; do
 	case $opt in
+	k)
+		kraken=TRUE
+	c)
+		consensus=TRUE
 	d)
 		startDir="$OPTARG"
 		;;
@@ -26,6 +33,8 @@ while getopts ":d:5:3:h" opt; do
 	h)
 		usage
 		;;
+	s)
+		sampleData="$OPTARG"
 	\?)
 		echo "Invalid option: -$OPTARG" >&2
 		exit 1
@@ -53,7 +62,7 @@ mkdir $workingFolder #creates the output dir
 myenvs=$(conda env list | grep sispa)
 if ! [[ $myenvs =~ "sispa" ]]; then 
 	echo "Creating sispa environment"; 
-	conda env create -n sispa -c conda-forge -c bioconda -c defaults bracken kraken2 kraken-biom chopper
+	conda env create -n sispa -c conda-forge -c bioconda -c r -c defaults bracken kraken2 kraken-biom chopper r-base r-curl
 else 
 	echo "Sispa environment already exists";
 fi
@@ -76,10 +85,26 @@ for i in $startDir/*gz; do
 	echo $i
 	j=$(basename $i)
 	k=${j/.fastq.gz/}
-	time gunzip -c $i | chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
-	kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ $j --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken
-	rm -f $workingFolder/trimmed_$j
+	time gunzip -c $i | conda run -n sispa chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
+
 done
+
+if ($kraken){
+	for j in $workingFolder/trimmed*gz; do
+		k=$(basename $j)
+		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
+		conda run -n sispa kraken-biom $workingFolder/*txt -o $workingFolder/OUTPUT_FP
+		# Run the R script on each of the files
+		conda run -n sispa Rscript sispa.r $workingFolder $sampleData
+	done
+}
+
+#if($consensus){
+	#
+	#}
+
+
+#rm -f $workingFolder/trimmed_$j
 
 #Need to add check for chimeric reads containing the sispa barcodes.
 

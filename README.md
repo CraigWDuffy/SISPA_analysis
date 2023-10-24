@@ -8,3 +8,14 @@
  cat /home/gary_gridion/runID/fastq_pass/barcodeX/*gz > ~/experimentName/runID_barcodeX.fastq.gz
  
  replacing experimentName, runID and barcodeX with their respecive names.
+ 
+ Running everything can take a long time so make sure to use tmux to avoid a disconnection.
+ 
+ To run the script use the following command:
+ bash sispa.sh -d [directory location]
+ 
+ If run like this then the script will trim the sequences but that's it. To run the individual analysis use one of the following additional options:
+ -5 [value] - number of bases to trim from the 5' end of each read. Default 18
+ -3 [value] - number of bases to trim from the 3' end of each read. Default 18
+ -k - run Kraken metagenomics analysis
+ -c [reference file] - generate a consensus sequence for each sample
