@@ -37,6 +37,7 @@ while getopts ":d:5:3:h:k:c" opt; do
 		;;
 	s)
 		sampleData="$OPTARG"
+		;;
 	\?)
 		echo "Invalid option: -$OPTARG" >&2
 		exit 1
