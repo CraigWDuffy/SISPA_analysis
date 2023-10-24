@@ -88,7 +88,7 @@ for i in $startDir/*gz; do
 	echo $i
 	j=$(basename $i)
 	k=${j/.fastq.gz/}
-	time gunzip -c $i | conda run -n sispa chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
+	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
 done
 
 if $kraken; then
