@@ -91,9 +91,13 @@ for i in $startDir/*gz; do
 	time gunzip -c $i | conda run -n sispa chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
 done
 
-echo $kraken
+if $kraken; then
+	echo $kraken
+else
+	echo "false"
+fi
 
-#if [ $kraken==TRUE ]; then
+#if $kraken; then
 #	for j in $workingFolder/trimmed*gz; do
 #		k=$(basename $j)
 #		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
