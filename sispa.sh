@@ -19,8 +19,10 @@ while getopts ":d:5:3:h:k:c" opt; do
 	case $opt in
 	k)
 		kraken=TRUE
+		;;
 	c)
 		consensus=TRUE
+		;;
 	d)
 		startDir="$OPTARG"
 		;;
