@@ -18,10 +18,10 @@ arg3=18
 while getopts ":d:5:3:h:k:c" opt; do
 	case $opt in
 	k)
-		kraken=TRUE
+		kraken=true
 		;;
 	c)
-		consensus=TRUE
+		consensus=true
 		;;
 	d)
 		startDir="$OPTARG"
@@ -84,12 +84,12 @@ fi
 #conda run -n sispa kraken2-build --download-library fungi --threads 150 --db microbiome_db
 #conda run -n sispa kraken2-build --build --threads 150 --db microbiome_db
 
-for i in $startDir/*gz; do
-	echo $i
-	j=$(basename $i)
-	k=${j/.fastq.gz/}
-	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
-done
+#for i in $startDir/*gz; do
+#	echo $i
+#	j=$(basename $i)
+#	k=${j/.fastq.gz/}
+#	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
+#done
 
 if $kraken; then
 	for j in $workingFolder/trimmed*gz; do
