@@ -94,11 +94,12 @@ fi
 if $kraken; then
 	for j in $workingFolder/trimmed*gz; do
 		k=$(basename $j)
-		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
-		conda run -n sispa kraken-biom $workingFolder/*txt -o $workingFolder/OUTPUT_FP
-		# Run the R script on each of the files
-		conda run -n sispa Rscript sispa.r $workingFolder $sampleData
+		#conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
 	done
+	conda run -n sispa kraken-biom $workingFolder/*txt -o $workingFolder/OUTPUT_FP
+	# Run the R script on each of the files
+	echo $sampleData $workingFolderß
+	conda run -n sispa Rscript sispa.r $workingFolder $sampleData
 fi
 
 #if($consensus){
