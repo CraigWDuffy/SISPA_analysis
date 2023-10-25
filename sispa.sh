@@ -15,7 +15,7 @@ usage(){
 arg5=18
 arg3=18
 
-while getopts ":d:5:3:h:k:c" opt; do
+while getopts "d:5:3:s:kch" opt; do
 	case $opt in
 	k)
 		kraken=true
