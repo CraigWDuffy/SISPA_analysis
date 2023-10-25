@@ -1,5 +1,7 @@
 #Haven't tested this yet
 
+args=commandArgs(trailingOynly=TRUE)
+
 currwf=args[1]
 sampleData=args[2]
 
