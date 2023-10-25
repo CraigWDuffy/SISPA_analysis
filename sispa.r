@@ -28,8 +28,6 @@ for (currPack in required_packages){
 print(sampleData)
 print(currwf)
 
-readline("Please press enter")
-
 sample_data <- read.csv(sampleData,row.names=1)
 data<-import_biom(paste(currwf,"/OUTPUT_FP",sep=""), parseFunction=parse_taxonomy_default)
 sample_data <-sample_data(sample_data)
