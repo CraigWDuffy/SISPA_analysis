@@ -1,6 +1,6 @@
 #Haven't tested this yet
 
-args=commandArgs(trailingOynly=TRUE)
+args=commandArgs(trailingOnly=TRUE)
 
 currwf=args[1]
 sampleData=args[2]
