@@ -98,7 +98,7 @@ if $kraken; then
 	done
 	conda run -n sispa kraken-biom $workingFolder/*txt -o $workingFolder/OUTPUT_FP
 	# Run the R script on each of the files
-	echo $sampleData $workingFolderß
+	echo $sampleData $workingFolder
 	conda run -n sispa Rscript sispa.r $workingFolder $sampleData
 fi
 
