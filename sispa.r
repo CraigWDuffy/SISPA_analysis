@@ -1,6 +1,6 @@
 #Haven't tested this yet
 
-currwf=agrs[1]
+currwf=args[1]
 sampleData=args[2]
 
 required_packages=c("phyloseq","ggplot2","biomformat","dplyr","RColorBrewer","vegan","DESeq2","scales")
