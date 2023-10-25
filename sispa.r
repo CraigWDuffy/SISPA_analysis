@@ -25,6 +25,10 @@ for (currPack in required_packages){
 	library(eval(currPack), character.only=T)
 }
 
+print(sampleData)
+print(currwf)
+
+readline("Please press enter")
 
 sample_data <- read.csv(sampleData,row.names=1)
 data<-import_biom(paste(currwf,"/OUTPUT_FP",sep=""), parseFunction=parse_taxonomy_default)
