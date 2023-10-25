@@ -15,7 +15,7 @@ usage(){
 arg5=18
 arg3=18
 
-while getopts "d:5:3:s:kch" opt; do
+while getopts "d:5:3:s:c:kh" opt; do
 	case $opt in
 	k)
 		kraken=true
@@ -37,6 +37,9 @@ while getopts "d:5:3:s:kch" opt; do
 		;;
 	s)
 		sampleData="$OPTARG"
+		;;
+	r)
+		ref="$OPTARG"
 		;;
 	\?)
 		echo "Invalid option: -$OPTARG" >&2
@@ -65,7 +68,7 @@ mkdir $workingFolder #creates the output dir
 myenvs=$(conda env list | grep sispa)
 if ! [[ $myenvs =~ "sispa" ]]; then 
 	echo "Creating sispa environment"; 
-	conda env create -n sispa -c conda-forge -c bioconda -c r -c defaults bracken kraken2 kraken-biom chopper r-base r-curl
+	conda env create -n sispa -c conda-forge -c bioconda -c r -c defaults bracken kraken2 kraken-biom chopper r-base r-curl minimap2 samtools
 else 
 	echo "Sispa environment already exists";
 fi
@@ -102,12 +105,21 @@ if $kraken; then
 	conda run -n sispa Rscript sispa.r $workingFolder $sampleData
 fi
 
-#if($consensus){
-	#
-	#}
+if [ -v consensus ]; then
+	for j in $workingFolder/trimmed*gz do
+		k=$(basename $j)
+		k=${k/.fastq.gz/}
+		refIndex=$(basename $consensus)
+		refIndex=${refIndex/.fasta}
+		refIndex=${refIndex/.fa}
+		minimap2 -d $refIndex.mmi $consensus -t 56
+		minimap2 $refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
+		samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
+		rm -rf $working/$k.bam
+		samtools consensus -@ 56 -aa -o $workingFolder/$k.SimpleConsensus.fasta $workingFolder/$k.sorted.bam
+	done
+fi
 
-
-#rm -f $workingFolder/trimmed_$j
 
 #Need to add check for chimeric reads containing the sispa barcodes.
 
