@@ -21,7 +21,7 @@ while getopts "d:5:3:s:c:kh" opt; do
 		kraken=true
 		;;
 	c)
-		consensus=true
+		consensus="$OPTARG"
 		;;
 	d)
 		startDir="$OPTARG"
@@ -68,7 +68,8 @@ mkdir $workingFolder #creates the output dir
 myenvs=$(conda env list | grep sispa)
 if ! [[ $myenvs =~ "sispa" ]]; then 
 	echo "Creating sispa environment"; 
-	conda env create -n sispa -c conda-forge -c bioconda -c r -c defaults bracken kraken2 kraken-biom chopper r-base r-curl minimap2 samtools
+	conda env create -n sispa -c conda-forge -c bioconda -c r -c defaults bracken kraken2 kraken-biom chopper r-base r-curl minimap2 samtools krona bcftools
+	conda run -n sispa ktUpdateTaxonomy.sh
 else 
 	echo "Sispa environment already exists";
 fi
@@ -94,6 +95,8 @@ for i in $startDir/*gz; do
 	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
 done
 
+
+#Kraken / bracken analysis
 if $kraken; then
 	for j in $workingFolder/trimmed*gz; do
 		k=$(basename $j)
@@ -105,18 +108,24 @@ if $kraken; then
 	conda run -n sispa Rscript sispa.r $workingFolder $sampleData
 fi
 
+
+#Generating consensus sequence - quick method based on max depth, not meant for in depth population studies
 if [ -v consensus ]; then
 	for j in $workingFolder/trimmed*gz do
 		k=$(basename $j)
 		k=${k/.fastq.gz/}
 		refIndex=$(basename $consensus)
+		samtools faidx $consensus
 		refIndex=${refIndex/.fasta}
 		refIndex=${refIndex/.fa}
 		minimap2 -d $refIndex.mmi $consensus -t 56
 		minimap2 $refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
 		samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
 		rm -rf $working/$k.bam
-		samtools consensus -@ 56 -aa -o $workingFolder/$k.SimpleConsensus.fasta $workingFolder/$k.sorted.bam
+		bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
+		bcftools index $workingFolder/$k.vcf.gz
+		bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
+		Rscript consensus_plots.r
 	done
 fi
 

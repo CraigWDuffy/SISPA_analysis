@@ -18,4 +18,4 @@
  -5 [value] - number of bases to trim from the 5' end of each read. Default 18
  -3 [value] - number of bases to trim from the 3' end of each read. Default 18
  -k - run Kraken metagenomics analysis
- -c [reference file] - generate a consensus sequence for each sample
+ -c [reference file] - generate a consensus sequence for each sample with IUPAC ambiguity codes for heterozygous bases. Indels will only be inserted if they are the dominant (frequency >50%). This will also create 2 coverage plots for each sample, the first is simple coverage at each base, the second is a rolling average over 100bp.
