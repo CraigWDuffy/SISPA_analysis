@@ -119,7 +119,7 @@ echo $consensus
 if [[ -v consensus ]]; then
 	echo "Creating consensus sequence for each sample"
 	echo $consensus
-	for j in $workingFolder/trimmed*gz do
+	for j in $workingFolder/trimmed*gz; do
 		echo $j
 	#	k=$(basename $j)
 	#	k=${k/.fastq.gz/}
