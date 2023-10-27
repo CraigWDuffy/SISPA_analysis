@@ -14,6 +14,7 @@ usage(){
 
 arg5=18
 arg3=18
+kraken=false
 
 while getopts "d:5:3:s:c:kh" opt; do
 	case $opt in
@@ -93,7 +94,7 @@ for i in $startDir/*gz; do
 	echo $i
 	j=$(basename $i)
 	k=${j/.fastq.gz/}
-	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz > $workingFolder/trimmed_$j
+	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz -p 56 > $workingFolder/trimmed_$j
 done
 
 
