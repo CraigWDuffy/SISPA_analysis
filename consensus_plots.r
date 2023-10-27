@@ -26,7 +26,7 @@ alldepths=list.files(currwf, pattern="depth")
 for (i in alldepths){
 	print(i)
 	print(currwf)
-	#data=read.table(paste(currwf,"/",i,sep="")
+	#data=read.table(paste(currwf,"/",i,sep=""))
 	#tiff(paste(i,".genomeCov.tiff",sep=""), width=3000, height=2000, units="px",res=300, compression="lzw")
 	#plot(data$V2, data$V3, cex=0.5, pch=19)
 	#dev.off()
