@@ -135,7 +135,7 @@ if [[ -v consensus ]]; then
 		#conda run -n sispa bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
 		#conda run -n sispa bcftools index $workingFolder/$k.vcf.gz
 		#conda run -n sispa bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
-		conda run -n sispa samtools depth -aa $workingFolder/$k.sorted.bam > $k.depth
+		conda run -n sispa samtools depth -aa $workingFolder/$k.sorted.bam > $workingFolder/$k.depth
 		conda run -n sispa Rscript consensus_plots.r $workingFolder
 	done
 fi
