@@ -7,7 +7,7 @@ usage(){
 	echo "-5: How many bases to trim from the 5 prime end of each read - Default 18"
 	echo "-3: How many bases to trim from the 3 prime end of each read - Default 18"
 	echo "-k: Run the kraken analysis"
-	echo "-s: Sample data in csv format"
+	#echo "-s: Sample data in csv format"
 	echo "-c: Generate a consensus sequence"
 	exit 1
 }
@@ -100,12 +100,13 @@ done
 if $kraken; then
 	for j in $workingFolder/trimmed*gz; do
 		k=$(basename $j)
-		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/microbiome_db/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
+		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/virus/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/$k.kraken $j
 	done
-	conda run -n sispa kraken-biom $workingFolder/*txt -o $workingFolder/OUTPUT_FP
+	#conda run -n sispa kraken-biom $workingFolder/*report.txt -o $workingFolder/OUTPUT_FP
 	# Run the R script on each of the files
-	echo $sampleData $workingFolder
-	conda run -n sispa Rscript sispa.r $workingFolder $sampleData
+	#echo $sampleData $workingFolder
+	#conda run -n sispa Rscript sispa.r $workingFolder $sampleData #Removed the use of sample data and the sispa.r script for now due to change in requirements but leaving the code in as it may be useful to add back later. Do need to check that it correctly assigns sample data to the OUTPUT_FP data
+	bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/*report.txt -o $workingFolder/$k.bracken -w $workingFolder/$k.bracken.report
 fi
 
 
@@ -118,8 +119,8 @@ if [ -v consensus ]; then
 		samtools faidx $consensus
 		refIndex=${refIndex/.fasta}
 		refIndex=${refIndex/.fa}
-		minimap2 -d $refIndex.mmi $consensus -t 56
-		minimap2 $refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
+		minimap2 -d $workingFolder/$refIndex.mmi $consensus -t 56
+		minimap2 $workingFolder/$refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
 		samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
 		rm -rf $working/$k.bam
 		bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz

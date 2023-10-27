@@ -32,13 +32,6 @@ sample_data <- read.csv(sampleData,row.names=1)
 data<-import_biom(paste(currwf,"/OUTPUT_FP",sep=""), parseFunction=parse_taxonomy_default)
 sample_data <-sample_data(sample_data)
 merged <- merge_phyloseq(data, sample_data)
-#sample_sums(data)
-
-#rarecurve(as(t(otu_table(data)),"matrix"), step=50, cex=0.5)
-#data.rarefied = rarefy_even_depth(data, rngseed=1, sample.size=0.9*min(sample_sums(data)), replace=F)
-#rarecurve(t(otu_table(data.rarefied)), step=50, cex=0.5)
-#merged.rarefied <- merge_phyloseq(data.rarefied, sample_data)
-#sample_sums(data.rarefied)
 
 tiff(paste(currwf,"/richness.tiff",sep=""),width=3000, height=1500, units="px",res=300, compression="lzw")
 plot_richness(merged, measures=c("Observed","Chao1", "Shannon")) #+ stat_ellipse()+ geom_boxplot(varwidth = TRUE, alpha = 0.5, position = "dodge2")+ theme_classic()+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))+ xlab("")
