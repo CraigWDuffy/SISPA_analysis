@@ -69,7 +69,7 @@ mkdir $workingFolder #creates the output dir
 myenvs=$(conda env list | grep sispa)
 if ! [[ $myenvs =~ "sispa" ]]; then 
 	echo "Creating sispa environment"; 
-	conda env create -n sispa -c conda-forge -c bioconda -c r -c defaults bracken kraken2 kraken-biom chopper r-base r-curl minimap2 samtools krona bcftools
+	conda create -n sispa -c conda-forge -c bioconda -c r -c defaults bracken kraken2 kraken-biom chopper r-base r-curl minimap2 samtools krona bcftools
 	conda run -n sispa ktUpdateTaxonomy.sh
 else 
 	echo "Sispa environment already exists";
