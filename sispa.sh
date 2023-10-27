@@ -118,6 +118,7 @@ fi
 #Generating consensus sequence - quick method based on max depth, not meant for in depth population studies
 if [ -v consensus ]; then
 	echo "Creating consensus sequence for each sample"
+	echo $consensus
 	for j in $workingFolder/trimmed*gz do
 		k=$(basename $j)
 		k=${k/.fastq.gz/}
