@@ -3,12 +3,12 @@
 
 usage(){
 	echo "Usage: $0 -d [dir] <optional arguments>"
-	echo "-d: Experiment directory containing the fastq.gz nanopore reads - Must be included"
-	echo "-5: How many bases to trim from the 5 prime end of each read - Default 18"
-	echo "-3: How many bases to trim from the 3 prime end of each read - Default 18"
+	echo "-d: [directory] Experiment directory containing the fastq.gz nanopore reads - Must be included"
+	echo "-5: [value] How many bases to trim from the 5 prime end of each read - Default 18"
+	echo "-3: [value] How many bases to trim from the 3 prime end of each read - Default 18"
 	echo "-k: Run the kraken analysis"
 	#echo "-s: Sample data in csv format"
-	echo "-c: Generate a consensus sequence"
+	echo "-c: [ref.feasta] Generate a consensus sequence by mapping to supplied reference file"
 	exit 1
 }
 
@@ -75,10 +75,11 @@ else
 fi
 
 
-if [ -e "/home/cwduffy/kraken_db/microbiome_db/" ]; then
-	echo "Exists"
+if [ -e "/home/cwduffy/kraken_db/virus/" ]; then
+	echo "Kraken2 nt database exists"
 else
 	echo "Kraken 2 database is missing. Ask Craig to install it"
+	exit 1
 fi
 
 #Code here for how to download and set up the kraken database - this takes a long time and the files are really big so it is better to have a single copy available to all. You must ensure that the path to it is accessible to all users and reflects your system
