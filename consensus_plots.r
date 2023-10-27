@@ -22,6 +22,8 @@ for (currPack in required_packages){
 	library(eval(currPack), character.only=T)
 }
 
+print(currwf)
+
 alldepths=list.files(currwf, pattern="depth")
 for (i in alldepths){
 	print(i)
