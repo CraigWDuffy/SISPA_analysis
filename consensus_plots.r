@@ -31,7 +31,9 @@ for (i in alldepths){
 	tiff(paste(currwf,"/",i,".genomeCov.tiff",sep=""), width=3000, height=2000, units="px",res=300, compression="lzw")
 	plot(data$V2, data$V3, cex=0.5, pch=19)
 	dev.off()
+	print("a")
 	tiff(paste(currwf,"/",i,".genomeCov.rollmean100.tiff",sep=""), width=3000, height=2000, units="px",res=300, compression="lzw")
 	plot(rollmean(data$V3, 100), cex=0.5, pch=19)
 	dev.off()
+	print("b")
 }
