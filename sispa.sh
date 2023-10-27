@@ -119,7 +119,8 @@ echo $consensus
 if [[ -v consensus ]]; then
 	echo "Creating consensus sequence for each sample"
 	echo $consensus
-	#for j in $workingFolder/trimmed*gz do
+	for j in $workingFolder/trimmed*gz do
+		echo $j
 	#	k=$(basename $j)
 	#	k=${k/.fastq.gz/}
 	#	refIndex=$(basename $consensus)
@@ -134,7 +135,7 @@ if [[ -v consensus ]]; then
 	#	bcftools index $workingFolder/$k.vcf.gz
 	#	bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
 	#	Rscript consensus_plots.r
-	#done
+	done
 fi
 
 
