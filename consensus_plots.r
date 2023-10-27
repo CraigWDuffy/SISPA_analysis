@@ -26,6 +26,7 @@ print(currwf)
 
 alldepths=list.files(currwf, pattern="depth")
 print(alldepths)
+print("t")
 for (i in alldepths){
 	print(i)
 	print(currwf)
