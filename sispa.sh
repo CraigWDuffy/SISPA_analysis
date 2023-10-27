@@ -104,8 +104,8 @@ if $kraken; then
 	echo "Running Kraken, bracken and krona for all samples"
 	for j in $workingFolder/trimmed*fastq.gz; do
 		k=$(basename $j)
-		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/virus/ --use-names --threads 56 --report $workingFolder/${k/.fastq.gz/}.report.txt --output $workingFolder/${k/.fastq.gz/}.kraken $j
-		conda run -n sispa bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/${k/.fastq.gz}.report.txt -o $workingFolder/${k/.fastq.gz/}.bracken -w $workingFolder/${k/.fastq.gz/}.bracken.report
+		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/virus/ --use-names --threads 56 --report $workingFolder/${k/.fastq.gz/}.kraken.report.txt --output $workingFolder/${k/.fastq.gz/}.kraken $j
+		conda run -n sispa bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/${k/.fastq.gz}.kraken.report.txt -o $workingFolder/${k/.fastq.gz/}.bracken -w $workingFolder/${k/.fastq.gz/}.bracken.report
 	done
 	#conda run -n sispa kraken-biom $workingFolder/*report.txt -o $workingFolder/OUTPUT_FP
 	# Run the R script on each of the files
