@@ -95,7 +95,7 @@ for i in $startDir/*gz; do
 	echo "Trimming reads"
 	j=$(basename $i)
 	k=${j/.fastq.gz/}
-	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz -p 56 > $workingFolder/trimmed_$j
+	#time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz -p 56 > $workingFolder/trimmed_$j
 done
 
 
@@ -105,12 +105,13 @@ if $kraken; then
 	for j in $workingFolder/trimmed*fastq.gz; do
 		k=$(basename $j)
 		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/virus/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/${k/.fastq.gz/}.kraken $j
+		bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/$k*report.txt -o $workingFolder/${k/.fastq.gz/}.bracken -w $workingFolder/${k/.fastq.gz/}.bracken.report
 	done
 	#conda run -n sispa kraken-biom $workingFolder/*report.txt -o $workingFolder/OUTPUT_FP
 	# Run the R script on each of the files
 	#echo $sampleData $workingFolder
 	#conda run -n sispa Rscript diversityPlots.r $workingFolder $sampleData #Removed the use of sample data and the sispa.r script for now due to change in requirements but leaving the code in as it may be useful to add back later. Do need to check that it correctly assigns sample data to the OUTPUT_FP data
-	bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/*report.txt -o $workingFolder/$k.bracken -w $workingFolder/$k.bracken.report
+	
 	ktImportTaxonomy -t 5 -m 3 -i -o $workingFolder/krona.html $workingFolder/*bracken
 fi
 

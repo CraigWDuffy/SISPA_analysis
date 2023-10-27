@@ -2,7 +2,7 @@ args=commandArgs(trailingOnly=TRUE)
 
 currwf=args[1]
 
-required_packages=c("phyloseq","ggplot2","biomformat","dplyr","RColorBrewer","vegan","DESeq2","scales")
+required_packages=c("zoo")
 
 for (currPack in required_packages){
 	installed=require(eval(currPack), character.only=T)
