@@ -25,6 +25,7 @@ for (currPack in required_packages){
 print(currwf)
 
 alldepths=list.files(currwf, pattern="depth")
+print(alldepths)
 for (i in alldepths){
 	print(i)
 	print(currwf)
