@@ -112,7 +112,7 @@ if $kraken; then
 	#echo $sampleData $workingFolder
 	#conda run -n sispa Rscript diversityPlots.r $workingFolder $sampleData #Removed the use of sample data and the sispa.r script for now due to change in requirements but leaving the code in as it may be useful to add back later. Do need to check that it correctly assigns sample data to the OUTPUT_FP data
 	
-	ktImportTaxonomy -t 5 -m 3 -i -o $workingFolder/krona.html $workingFolder/*bracken
+	ktImportTaxonomy -t 5 -m 3 -i -o $workingFolder/krona.html $workingFolder/*bracken.report
 fi
 
 echo $consensus
