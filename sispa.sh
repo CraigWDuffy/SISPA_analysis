@@ -90,13 +90,13 @@ fi
 #conda run -n sispa kraken2-build --download-library fungi --threads 150 --db microbiome_db
 #conda run -n sispa kraken2-build --build --threads 150 --db microbiome_db
 
-#for i in $startDir/*gz; do
-#	echo $i
-#	echo "Trimming reads"
-#	j=$(basename $i)
-#	k=${j/.fastq.gz/}
-#	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz -p 56 > $workingFolder/trimmed_$j
-#done
+for i in $startDir/*gz; do
+	echo $i
+	echo "Trimming reads"
+	j=$(basename $i)
+	k=${j/.fastq.gz/}
+	time gunzip -c $i | conda run -n sispa --no-capture-output chopper --headcrop 18 --tailcrop 18 -l 100 --threads 56 | pigz -p 56 > $workingFolder/trimmed_$j
+done
 
 
 #Kraken / bracken analysis
@@ -134,7 +134,7 @@ if [[ -v consensus ]]; then
 		bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
 		bcftools index $workingFolder/$k.vcf.gz
 		bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
-		Rscript consensus_plots.r
+		Rscript consensus_plots.r $workingFolder
 	done
 fi
 

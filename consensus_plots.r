@@ -1,3 +1,7 @@
+args=commandArgs(trailingOnly=TRUE)
+
+currwf=args[1]
+
 required_packages=c("phyloseq","ggplot2","biomformat","dplyr","RColorBrewer","vegan","DESeq2","scales")
 
 for (currPack in required_packages){
@@ -18,9 +22,9 @@ for (currPack in required_packages){
 	library(eval(currPack), character.only=T)
 }
 
-alldepths=list.files(pattern="depth")
+alldepths=list.files(currwf, pattern="depth")
 for (i in alldepths){
-	data=read.table(i)
+	data=read.table(paste(currwf,"/",i,sep="")
 	tiff(paste(i,".genomeCov.tiff",sep=""), width=3000, height=2000, units="px",res=300, compression="lzw")
 	plot(data$V2, data$V3, cex=0.5, pch=19)
 	dev.off()
