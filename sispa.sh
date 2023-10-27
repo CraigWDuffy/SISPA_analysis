@@ -105,7 +105,7 @@ if $kraken; then
 	#conda run -n sispa kraken-biom $workingFolder/*report.txt -o $workingFolder/OUTPUT_FP
 	# Run the R script on each of the files
 	#echo $sampleData $workingFolder
-	#conda run -n sispa Rscript sispa.r $workingFolder $sampleData #Removed the use of sample data and the sispa.r script for now due to change in requirements but leaving the code in as it may be useful to add back later. Do need to check that it correctly assigns sample data to the OUTPUT_FP data
+	#conda run -n sispa Rscript diversityPlots.r $workingFolder $sampleData #Removed the use of sample data and the sispa.r script for now due to change in requirements but leaving the code in as it may be useful to add back later. Do need to check that it correctly assigns sample data to the OUTPUT_FP data
 	bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/*report.txt -o $workingFolder/$k.bracken -w $workingFolder/$k.bracken.report
 fi
 
