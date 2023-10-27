@@ -121,21 +121,20 @@ if [[ -v consensus ]]; then
 	echo $consensus
 	for j in $workingFolder/trimmed*gz; do
 		echo $j
-		echo "fish"
-	#	k=$(basename $j)
-	#	k=${k/.fastq.gz/}
-	#	refIndex=$(basename $consensus)
-	#	samtools faidx $consensus
-	#	refIndex=${refIndex/.fasta}
-	#	refIndex=${refIndex/.fa}
-	#	minimap2 -d $workingFolder/$refIndex.mmi $consensus -t 56
-	#	minimap2 $workingFolder/$refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
-	#	samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
-	#	rm -rf $working/$k.bam
-	#	bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
-	#	bcftools index $workingFolder/$k.vcf.gz
-	#	bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
-	#	Rscript consensus_plots.r
+		k=$(basename $j)
+		k=${k/.fastq.gz/}
+		refIndex=$(basename $consensus)
+		samtools faidx $consensus
+		refIndex=${refIndex/.fasta}
+		refIndex=${refIndex/.fa}
+		minimap2 -d $workingFolder/$refIndex.mmi $consensus -t 56
+		minimap2 $workingFolder/$refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
+		samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
+		rm -rf $working/$k.bam
+		bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
+		bcftools index $workingFolder/$k.vcf.gz
+		bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
+		Rscript consensus_plots.r
 	done
 fi
 
