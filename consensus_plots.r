@@ -24,7 +24,7 @@ for (currPack in required_packages){
 
 print(currwf)
 
-alldepths=list.files(currwf, pattern="depth")
+alldepths=list.files(currwf, pattern="depth$")
 print(alldepths)
 for (i in alldepths){
 	data=read.table(paste(currwf,"/",i,sep=""))
