@@ -105,14 +105,14 @@ if $kraken; then
 	for j in $workingFolder/trimmed*fastq.gz; do
 		k=$(basename $j)
 		conda run -n sispa kraken2 --db /home/cwduffy/kraken_db/virus/ --use-names --threads 56 --report $workingFolder/$k.report.txt --output $workingFolder/${k/.fastq.gz/}.kraken $j
-		bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/$k*report.txt -o $workingFolder/${k/.fastq.gz/}.bracken -w $workingFolder/${k/.fastq.gz/}.bracken.report
+		conda run -n sispa bracken -d /home/cwduffy/kraken_db/virus/ -i $workingFolder/$k*report.txt -o $workingFolder/${k/.fastq.gz/}.bracken -w $workingFolder/${k/.fastq.gz/}.bracken.report
 	done
 	#conda run -n sispa kraken-biom $workingFolder/*report.txt -o $workingFolder/OUTPUT_FP
 	# Run the R script on each of the files
 	#echo $sampleData $workingFolder
 	#conda run -n sispa Rscript diversityPlots.r $workingFolder $sampleData #Removed the use of sample data and the sispa.r script for now due to change in requirements but leaving the code in as it may be useful to add back later. Do need to check that it correctly assigns sample data to the OUTPUT_FP data
 	
-	ktImportTaxonomy -t 5 -m 3 -i -o $workingFolder/krona.html $workingFolder/*bracken.report
+	conda run -n sispa ktImportTaxonomy -t 5 -m 3 -i -o $workingFolder/krona.html $workingFolder/*bracken.report
 fi
 
 echo $consensus
@@ -125,18 +125,18 @@ if [[ -v consensus ]]; then
 		k=$(basename $j)
 		k=${k/.fastq.gz/}
 		refIndex=$(basename $consensus)
-		samtools faidx $consensus
+		conda run -n sispa samtools faidx $consensus
 		refIndex=${refIndex/.fasta}
 		refIndex=${refIndex/.fa}
-		#minimap2 -d $workingFolder/$refIndex.mmi $consensus -t 56
-		#minimap2 $workingFolder/$refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
-		#samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
+		#conda run -n sispa minimap2 -d $workingFolder/$refIndex.mmi $consensus -t 56
+		#conda run -n sispa minimap2 $workingFolder/$refIndex.mmi -at 56 $j | samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
+		#conda run -n sispa samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
 		#rm -rf $workingFolder/$k.bam
-		#bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
-		#bcftools index $workingFolder/$k.vcf.gz
-		#bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
-		samtools depth -aa $workingFolder/$k.sorted.bam > $k.depth
-		Rscript consensus_plots.r $workingFolder
+		#conda run -n sispa bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
+		#conda run -n sispa bcftools index $workingFolder/$k.vcf.gz
+		#conda run -n sispa bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
+		conda run -n sispa samtools depth -aa $workingFolder/$k.sorted.bam > $k.depth
+		conda run -n sispa Rscript consensus_plots.r $workingFolder
 	done
 fi
 
