@@ -121,6 +121,7 @@ if [[ -v consensus ]]; then
 	echo $consensus
 	for j in $workingFolder/trimmed*gz; do
 		echo $j
+		echo "fish"
 	#	k=$(basename $j)
 	#	k=${k/.fastq.gz/}
 	#	refIndex=$(basename $consensus)
