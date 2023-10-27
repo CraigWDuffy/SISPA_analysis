@@ -129,10 +129,10 @@ if [[ -v consensus ]]; then
 		refIndex=${refIndex/.fasta}
 		refIndex=${refIndex/.fa}
 		conda run -n sispa minimap2 -d $workingFolder/$refIndex.mmi $consensus -t 56
-		conda run -n sispa --no-capture-output minimap2 $workingFolder/$refIndex.mmi -at 56 $j | conda run -n sispa samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
+		conda run -n sispa --no-capture-output minimap2 $workingFolder/$refIndex.mmi -at 56 $j | conda run -n sispa --no-capture-output samtools view -bT $consensus -@ 56 -o $workingFolder/$k.bam
 		conda run -n sispa samtools sort -@ 56 $workingFolder/$k.bam -o $workingFolder/$k.sorted.bam
 		rm -rf $workingFolder/$k.bam
-		conda run -n sispa --no-capture-output bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | conda run -n sispa bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
+		conda run -n sispa --no-capture-output bcftools mpileup -Ou -f $consensus $workingFolder/$k.sorted.bam --threads 56 --annotate FORMAT/AD,INFO/AD | conda run -n sispa --no-capture-output bcftools call -mv -Oz --ploidy 2 --threads 56 > $workingFolder/$k.vcf.gz
 		conda run -n sispa bcftools index $workingFolder/$k.vcf.gz
 		conda run -n sispa bcftools consensus -f $consensus -I --mark-ins lc -o $workingFolder/$k.consensus.fasta $workingFolder/$k.vcf.gz
 		conda run -n sispa samtools depth -aa $workingFolder/$k.sorted.bam > $workingFolder/$k.depth
