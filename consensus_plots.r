@@ -8,7 +8,7 @@ for (currPack in required_packages){
 	installed=require(eval(currPack), character.only=T)
 	if (!installed){
 		if (currPack %in% rownames(available.packages())){
-			install.packages(eval(currPack))
+			install.packages(eval(currPack), repos="https://www.stats.bris.ac.uk/R/")
 		} else {
 			if (!require("BiocManager", quietly = TRUE)){
 				install.packages("BiocManager")
