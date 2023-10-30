@@ -27,3 +27,7 @@ If run like this then the script will trim the sequences but that's it. To run t
 -k - run Kraken metagenomics analysis
 -c [reference file] - generate a consensus sequence for each sample with IUPAC ambiguity codes for heterozygous bases. Indels will only be inserted if they are the dominant (frequency >50%). This will also create 2 coverage plots for each sample, the first is simple coverage at each base, the second is a rolling average over 100bp.
 
+# Known to do
+1. Set up the script to run from any folder, at the moment you have to run it from the folder it has been downloaded into and where the secondary scripts are located.
+2. Option to specify output folder with default of the current location
+3. Additional options for the generation of consensus sequences when there are subtypes of a virus (for example RSV A/B)

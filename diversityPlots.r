@@ -10,8 +10,8 @@ required_packages=c("phyloseq","ggplot2","biomformat","dplyr","RColorBrewer","ve
 for (currPack in required_packages){
 	installed=require(eval(currPack), character.only=T)
 	if (!installed){
-		if (currPack %in% rownames(available.packages())){
-			install.packages(eval(currPack))
+		if (currPack %in% rownames(available.packages(repos="https://www.stats.bris.ac.uk/R/"))){
+			install.packages(eval(currPack), repos="https://www.stats.bris.ac.uk/R/")
 		} else {
 			if (!require("BiocManager", quietly = TRUE)){
 				install.packages("BiocManager")
