@@ -7,9 +7,11 @@ required_packages=c("zoo")
 for (currPack in required_packages){
 	installed=require(eval(currPack), character.only=T)
 	if (!installed){
-		if (currPack %in% rownames(available.packages())){
+		if (currPack %in% rownames(available.packages(repos="https://www.stats.bris.ac.uk/R/"))){
+			print("Getting from CRAN")
 			install.packages(eval(currPack), repos="https://www.stats.bris.ac.uk/R/")
 		} else {
+			print("Getting from bioconductor")
 			if (!require("BiocManager", quietly = TRUE)){
 				install.packages("BiocManager")
 			}
