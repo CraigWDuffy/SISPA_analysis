@@ -8,7 +8,7 @@ usage(){
 	echo "-3: [value] How many bases to trim from the 3 prime end of each read - Default 18"
 	echo "-k: Run the kraken analysis"
 	#echo "-s: Sample data in csv format"
-	echo "-c: [ref.feasta] Generate a consensus sequence by mapping to supplied reference file"
+	echo "-c: [ref.fasta] Generate a consensus sequence by mapping to supplied reference file"
 	exit 1
 }
 
